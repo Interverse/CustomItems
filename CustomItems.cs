@@ -30,7 +30,7 @@ namespace CustomItems {
         }
 
         private void OnInitialize(EventArgs args) {
-            Commands.ChatCommands.Add(new Command("customitem", CustomItem, "customitem") {
+            Commands.ChatCommands.Add(new Command("customitem", CustomItem, "customitem", "citem") {
                 HelpText = "/customitem <id> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo."
             });
