@@ -61,29 +61,29 @@ namespace CustomItems {
                     targetItem.color = new Color(int.Parse(args.Parameters[index + 1].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
                         int.Parse(args.Parameters[index + 1].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
                         int.Parse(args.Parameters[index + 1].Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
-                } else if (lower.Equals("damage") && index + 1 < num) {
+                } else if ((lower.Equals("damage") || lower.Equals("d")) && index + 1 < num) {
                     targetItem.damage = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("knockback") && index + 1 < num) {
+                } else if ((lower.Equals("knockback") || lower.Equals("kb")) && index + 1 < num) {
                     targetItem.knockBack = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("useanimation") && index + 1 < num) {
+                } else if ((lower.Equals("useanimation") || lower.Equals("ua")) && index + 1 < num) {
                     targetItem.useAnimation = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("usetime") && index + 1 < num) {
+                } else if ((lower.Equals("usetime") || lower.Equals("ut")) && index + 1 < num) {
                     targetItem.useTime = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("shoot") && index + 1 < num) {
+                } else if ((lower.Equals("shoot") || lower.Equals("s")) && index + 1 < num) {
                     targetItem.shoot = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("shootspeed") && index + 1 < num) {
+                } else if ((lower.Equals("shootspeed") || lower.Equals("ss")) && index + 1 < num) {
                     targetItem.shootSpeed = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("width") && index + 1 < num) {
+                } else if ((lower.Equals("width") || lower.Equals("w")) && index + 1 < num) {
                     targetItem.width = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("height") && index + 1 < num) {
+                } else if ((lower.Equals("height") || lower.Equals("h")) && index + 1 < num) {
                     targetItem.height = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("scale") && index + 1 < num) {
+                } else if ((lower.Equals("scale") || lower.Equals("sc")) && index + 1 < num) {
                     targetItem.scale = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("ammo") && index + 1 < num) {
+                } else if ((lower.Equals("ammo") || lower.Equals("a")) && index + 1 < num) {
                     targetItem.ammo = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("useammo") && index + 1 < num) {
+                } else if ((lower.Equals("useammo") || lower.Equals("ua")) && index + 1 < num) {
                     targetItem.useAmmo = int.Parse(args.Parameters[index + 1]);
-                } else if (lower.Equals("notammo") && index + 1 < num) {
+                } else if ((lower.Equals("notammo") || lower.Equals("na")) && index + 1 < num) {
                     targetItem.notAmmo = Boolean.Parse(args.Parameters[index + 1]);
                 }
                 ++index;
