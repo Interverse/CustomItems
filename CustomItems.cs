@@ -57,7 +57,7 @@ namespace CustomItems {
 
             for (int index = 1; index < num; ++index) {
                 string lower = parameters[index].ToLower();
-                if (lower.Equals("hexcolor") && index + 1 < num) {
+                if ((lower.Equals("hexcolor") || lower.Equals("hc")) && index + 1 < num) {
                     targetItem.color = new Color(int.Parse(args.Parameters[index + 1].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
                         int.Parse(args.Parameters[index + 1].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
                         int.Parse(args.Parameters[index + 1].Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
