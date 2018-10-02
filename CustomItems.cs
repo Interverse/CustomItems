@@ -31,12 +31,12 @@ namespace CustomItems {
 
         private void OnInitialize(EventArgs args) {
             Commands.ChatCommands.Add(new Command("customitem", CustomItem, "customitem", "citem") {
-                HelpText = "/customitem <id> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
+                HelpText = "/customitem <id/itemname> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo."
             });
 
             Commands.ChatCommands.Add(new Command("customitem.give", GiveCustomItem, "givecustomitem", "gcitem") {
-                HelpText = "/customitem <id> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
+                HelpText = "/givecustomitem <name> <id/itemname> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo."
             });
         }
@@ -46,7 +46,7 @@ namespace CustomItems {
             int num = parameters.Count();
 
             if (num == 0) {
-                args.Player.SendErrorMessage("Invalid Syntax. /customitem <id> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
+                args.Player.SendErrorMessage("Invalid Syntax. /customitem <id/itemname> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo.");
                 return;
             }
@@ -101,7 +101,7 @@ namespace CustomItems {
             int num = parameters.Count();
 
             if (num == 0) {
-                args.Player.SendErrorMessage("Invalid Syntax. /customitem <name> <id> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
+                args.Player.SendErrorMessage("Invalid Syntax. /givecustomitem <name> <id/itemname> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo.");
                 return;
             }
