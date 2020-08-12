@@ -8,7 +8,7 @@ using TerrariaApi.Server;
 using TShockAPI;
 
 namespace CustomItems {
-    [ApiVersion (2, 1)]
+    [ApiVersion(2, 1)]
     public class CustomItems : TerrariaPlugin {
         public override string Name => "CustomItems";
         public override string Author => "Johuan";
@@ -40,7 +40,7 @@ namespace CustomItems {
                 "usetime, shoot, shootspeed, width, height, scale, ammo, useammo, notammo."
             });
         }
-        
+
         private void CustomItem(CommandArgs args) {
             List<string> parameters = args.Parameters;
             int num = parameters.Count();
@@ -58,42 +58,73 @@ namespace CustomItems {
             int itemIndex = Item.NewItem((int)player.X, (int)player.Y, item.width, item.height, item.type, item.maxStack);
 
             Item targetItem = Main.item[itemIndex];
+            targetItem.playerIndexTheItemIsReservedFor = args.Player.Index;
 
-            for (int index = 1; index < num; ++index) {
-                string lower = parameters[index].ToLower();
-                if ((lower.Equals("hexcolor") || lower.Equals("hc")) && index + 1 < num) {
-                    targetItem.color = new Color(int.Parse(args.Parameters[index + 1].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
-                        int.Parse(args.Parameters[index + 1].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
-                        int.Parse(args.Parameters[index + 1].Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
-                } else if ((lower.Equals("damage") || lower.Equals("d")) && index + 1 < num) {
-                    targetItem.damage = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("knockback") || lower.Equals("kb")) && index + 1 < num) {
-                    targetItem.knockBack = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("useanimation") || lower.Equals("ua")) && index + 1 < num) {
-                    targetItem.useAnimation = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("usetime") || lower.Equals("ut")) && index + 1 < num) {
-                    targetItem.useTime = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("shoot") || lower.Equals("s")) && index + 1 < num) {
-                    targetItem.shoot = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("shootspeed") || lower.Equals("ss")) && index + 1 < num) {
-                    targetItem.shootSpeed = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("width") || lower.Equals("w")) && index + 1 < num) {
-                    targetItem.width = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("height") || lower.Equals("h")) && index + 1 < num) {
-                    targetItem.height = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("scale") || lower.Equals("sc")) && index + 1 < num) {
-                    targetItem.scale = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("ammo") || lower.Equals("a")) && index + 1 < num) {
-                    targetItem.ammo = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("useammo") || lower.Equals("ua")) && index + 1 < num) {
-                    targetItem.useAmmo = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("notammo") || lower.Equals("na")) && index + 1 < num) {
-                    targetItem.notAmmo = Boolean.Parse(args.Parameters[index + 1]);
+            var pairedInputs = SplitIntoPairs<string>(parameters.Skip(1).ToArray());
+
+            foreach (var pair in pairedInputs) {
+                string param = pair[0];
+                string arg = pair[1];
+                switch (param) {
+                    case "hexcolor":
+                    case "hc":
+                        targetItem.color = new Color(int.Parse(arg.Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
+                            int.Parse(arg.Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
+                            int.Parse(arg.Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
+                        break;
+                    case "damage":
+                    case "d":
+                        targetItem.damage = int.Parse(arg);
+                        break;
+                    case "knockback":
+                    case "kb":
+                        targetItem.knockBack = int.Parse(arg);
+                        break;
+                    case "useanimation":
+                    case "ua":
+                        targetItem.useAnimation = int.Parse(arg);
+                        break;
+                    case "usetime":
+                    case "ut":
+                        targetItem.useTime = int.Parse(arg);
+                        break;
+                    case "shoot":
+                    case "s":
+                        targetItem.shoot = int.Parse(arg);
+                        break;
+                    case "shootspeed":
+                    case "ss":
+                        targetItem.shootSpeed = int.Parse(arg);
+                        break;
+                    case "width":
+                    case "w":
+                        targetItem.width = int.Parse(arg);
+                        break;
+                    case "height":
+                    case "h":
+                        targetItem.height = int.Parse(arg);
+                        break;
+                    case "scale":
+                    case "sc":
+                        targetItem.scale = int.Parse(arg);
+                        break;
+                    case "ammo":
+                    case "a":
+                        targetItem.ammo = int.Parse(arg);
+                        break;
+                    case "useammo":
+                        targetItem.useAmmo = int.Parse(arg);
+                        break;
+                    case "notammo":
+                    case "na":
+                        targetItem.notAmmo = Boolean.Parse(arg);
+                        break;
                 }
-                ++index;
             }
 
-            TSPlayer.All.SendData(PacketTypes.TweakItem, "", itemIndex, 255, 63);
+            TSPlayer.All.SendData(PacketTypes.UpdateItemDrop, null, itemIndex);
+            TSPlayer.All.SendData(PacketTypes.ItemOwner, null, itemIndex);
+            TSPlayer.All.SendData(PacketTypes.TweakItem, null, itemIndex, 255, 63);
         }
 
         private void GiveCustomItem(CommandArgs args) {
@@ -106,7 +137,7 @@ namespace CustomItems {
                 return;
             }
 
-            List<TSPlayer> players = TShock.Utils.FindPlayer(args.Parameters[0]);
+            List<TSPlayer> players = TShock.Players.Where(c => c.Name.Contains(args.Parameters[0])).ToList();
             if (players.Count != 1) {
                 args.Player.SendErrorMessage("Failed to find player of: " + args.Parameters[0]);
                 return;
@@ -124,42 +155,82 @@ namespace CustomItems {
             int itemIndex = Item.NewItem((int)player.X, (int)player.Y, item.width, item.height, item.type, item.maxStack);
 
             Item targetItem = Main.item[itemIndex];
+            targetItem.playerIndexTheItemIsReservedFor = args.Player.Index;
 
-            for (int index = 2; index < num; ++index) {
-                string lower = parameters[index].ToLower();
-                if ((lower.Equals("hexcolor") || lower.Equals("hc")) && index + 1 < num) {
-                    targetItem.color = new Color(int.Parse(args.Parameters[index + 1].Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
-                        int.Parse(args.Parameters[index + 1].Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
-                        int.Parse(args.Parameters[index + 1].Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
-                } else if ((lower.Equals("damage") || lower.Equals("d")) && index + 1 < num) {
-                    targetItem.damage = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("knockback") || lower.Equals("kb")) && index + 1 < num) {
-                    targetItem.knockBack = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("useanimation") || lower.Equals("ua")) && index + 1 < num) {
-                    targetItem.useAnimation = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("usetime") || lower.Equals("ut")) && index + 1 < num) {
-                    targetItem.useTime = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("shoot") || lower.Equals("s")) && index + 1 < num) {
-                    targetItem.shoot = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("shootspeed") || lower.Equals("ss")) && index + 1 < num) {
-                    targetItem.shootSpeed = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("width") || lower.Equals("w")) && index + 1 < num) {
-                    targetItem.width = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("height") || lower.Equals("h")) && index + 1 < num) {
-                    targetItem.height = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("scale") || lower.Equals("sc")) && index + 1 < num) {
-                    targetItem.scale = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("ammo") || lower.Equals("a")) && index + 1 < num) {
-                    targetItem.ammo = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("useammo") || lower.Equals("ua")) && index + 1 < num) {
-                    targetItem.useAmmo = int.Parse(args.Parameters[index + 1]);
-                } else if ((lower.Equals("notammo") || lower.Equals("na")) && index + 1 < num) {
-                    targetItem.notAmmo = Boolean.Parse(args.Parameters[index + 1]);
+            var pairedInputs = SplitIntoPairs<string>(parameters.Skip(2).ToArray());
+            foreach (var pair in pairedInputs) {
+                string param = pair[0];
+                string arg = pair[1];
+                switch (param) {
+                    case "hexcolor":
+                    case "hc":
+                        targetItem.color = new Color(int.Parse(arg.Substring(0, 2), System.Globalization.NumberStyles.HexNumber),
+                            int.Parse(arg.Substring(2, 2), System.Globalization.NumberStyles.HexNumber),
+                            int.Parse(arg.Substring(4, 2), System.Globalization.NumberStyles.HexNumber));
+                        break;
+                    case "damage":
+                    case "d":
+                        targetItem.damage = int.Parse(arg);
+                        break;
+                    case "knockback":
+                    case "kb":
+                        targetItem.knockBack = int.Parse(arg);
+                        break;
+                    case "useanimation":
+                    case "ua":
+                        targetItem.useAnimation = int.Parse(arg);
+                        break;
+                    case "usetime":
+                    case "ut":
+                        targetItem.useTime = int.Parse(arg);
+                        break;
+                    case "shoot":
+                    case "s":
+                        targetItem.shoot = int.Parse(arg);
+                        break;
+                    case "shootspeed":
+                    case "ss":
+                        targetItem.shootSpeed = int.Parse(arg);
+                        break;
+                    case "width":
+                    case "w":
+                        targetItem.width = int.Parse(arg);
+                        break;
+                    case "height":
+                    case "h":
+                        targetItem.height = int.Parse(arg);
+                        break;
+                    case "scale":
+                    case "sc":
+                        targetItem.scale = int.Parse(arg);
+                        break;
+                    case "ammo":
+                    case "a":
+                        targetItem.ammo = int.Parse(arg);
+                        break;
+                    case "useammo":
+                        targetItem.useAmmo = int.Parse(arg);
+                        break;
+                    case "notammo":
+                    case "na":
+                        targetItem.notAmmo = Boolean.Parse(arg);
+                        break;
                 }
-                ++index;
             }
 
-            TSPlayer.All.SendData(PacketTypes.TweakItem, "", itemIndex, 255, 63);
+            TSPlayer.All.SendData(PacketTypes.UpdateItemDrop, null, itemIndex);
+            TSPlayer.All.SendData(PacketTypes.ItemOwner, null, itemIndex);
+            TSPlayer.All.SendData(PacketTypes.TweakItem, null, itemIndex, 255, 63);
+        }
+
+        public static T[][] SplitIntoPairs<T>(T[] input) {
+            T[][] split = new T[input.Length / 2][];
+
+            for (int x = 0; x < input.Length / 2; x++) {
+                split[x] = new[] { input[x * 2], input[x * 2 + 1] };
+            }
+
+            return split;
         }
     }
 }
