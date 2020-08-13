@@ -52,6 +52,10 @@ namespace CustomItems {
             }
 
             List<Item> items = TShock.Utils.GetItemByIdOrName(args.Parameters[0]);
+            if (items.Count == 0) {
+                args.Player.SendErrorMessage($"No item found by the name of {args.Parameters[0]}.");
+                return;
+            }
             Item item = items[0];
 
             TSPlayer player = new TSPlayer(args.Player.Index);
@@ -149,6 +153,10 @@ namespace CustomItems {
             }
 
             List<Item> items = TShock.Utils.GetItemByIdOrName(args.Parameters[1]);
+            if (items.Count == 0) {
+                args.Player.SendErrorMessage($"No item found by the name of {args.Parameters[1]}.");
+                return;
+            }
             Item item = items[0];
 
             TSPlayer player = new TSPlayer(players[0].Index);

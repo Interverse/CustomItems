@@ -1,0 +1,10 @@
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\CustomItems.dll
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\CustomItems.pdb
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\OTAPI.dll
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\TerrariaServer.exe
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\TShockAPI.dll
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\bin\Debug\HttpServer.dll
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\obj\Debug\CustomItems.csprojAssemblyReference.cache
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\obj\Debug\CustomItems.csproj.CopyComplete
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\obj\Debug\CustomItems.dll
+C:\Users\jiong\Desktop\Programs\TShock Plugins\CustomItems\obj\Debug\CustomItems.pdb
