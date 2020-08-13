@@ -23,7 +23,7 @@ $RECYCLE.BIN/
 # =========================
 *.suo
 *.gitignore
-CustomItems/obj/Debug/
+obj/Debug/
 packages/
 .vs/
 .git/
