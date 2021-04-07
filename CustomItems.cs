@@ -299,7 +299,7 @@ namespace CustomItems {
 
         private void GiveCustomItem(CommandArgs args) {
             List<string> parameters = args.Parameters;
-            int num = parameters.Counta();
+            int num = parameters.Count();
 
             if (num == 0) {
                 args.Player.SendErrorMessage("Invalid Syntax. /givecustomitem <name> <id/itemname> <parameters> <#> ... \nParameters: hexcolor, damage, knockback, useanimation, " +
